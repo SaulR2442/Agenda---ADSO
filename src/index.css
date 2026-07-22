@@ -52,6 +52,7 @@
 
 body {
   margin: 0;
+  background: #c6edf2;
 }
 
 #root {
@@ -77,6 +78,7 @@ h1 {
   font-size: 56px;
   letter-spacing: -1.68px;
   margin: 32px 0;
+  color: #a092f7;
   @media (max-width: 1024px) {
     font-size: 36px;
     margin: 20px 0;
@@ -91,8 +93,12 @@ h2 {
     font-size: 20px;
   }
 }
+h3{
+  color: #a092f7;
+}
 p {
   margin: 0;
+  color:#aa3bff;
 }
 
 code,
