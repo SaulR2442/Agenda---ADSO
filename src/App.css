@@ -1,31 +1,113 @@
-.app-container { max-width: 520px; margin: 2rem auto; font-family: Arial, sans-serif; }
-.app-title { color:#008037; text-align:center; margin-bottom:1rem; }
+:root {
+  --morado: #7c3aed;
+  --morado-oscuro: #5b21b6;
+  --gris: #374151;
+  --borde: #d1d5db;
+  --error: #dc2626;
+  --radio: 10px;
+  --shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
 
-.form-contacto { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
-.form-contacto input { padding:8px; border-radius:6px; border:1px solid #ccc; font-size:14px; }
-.form-contacto button { background:#008037; color:#fff; border:0; padding:10px; border-radius:6px; cursor:pointer; }
-.form-contacto button:hover { background:#006b2f; }
-
-.tarjeta-contacto { border:1px solid #ddd; border-radius:8px; padding:1rem; background:#fff; margin-bottom:.5rem; }
-.tarjeta-contacto h3 { color:#008037; margin:0 0 .3rem; }
-.btn-eliminar { margin-top:.15rem; background:#c62828; color:#fff; border:0; padding:.5rem .75rem; border-radius:6px; cursor:pointer; }
-.btn-eliminar:hover { background:#8e0000; }
-
-/* Espaciados dentro de la tarjeta */
-.tarjeta-contacto { display: flex; flex-direction: column; gap: 4px; }
-
-/* Estilo opcional para las líneas de datos */
-.tarjeta-contacto .dato { margin: 0; color: #333; }
-
-/* La etiqueta (rol) en su propia línea */
-.tarjeta-contacto .tag {
+body {
+  background: #f8fafc;
+  font-family: "Inter", Arial, sans-serif;
   margin: 0;
-  color: #555;
-  font-size: 0.9rem;}
+  color: var(--gris);
+}
 
-  /* Contenedor del botón: lo empuja hacia la derecha y separa del contenido */
-.tarjeta-contacto .acciones {
-  margin-top: 8px;
+.app-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.app-title {
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--morado);
+  margin: 0.3rem 0;
+}
+
+.subtitulo {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin-bottom: 1.2rem;
+}
+
+.form-contacto {
+  background: #fff;
+  padding: 1rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+}
+
+label {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+input {
+  padding: 0.65rem;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  font-size: 0.9rem;
+}
+
+.btn-primario {
+  background: var(--morado);
+  color: #fff;
+  padding: 0.7rem;
+  border: 0;
+  border-radius: var(--radio);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-primario:hover {
+  background: var(--morado-oscuro);
+}
+
+.tarjeta-contacto {
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 1rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.tarjeta-contacto h3 {
+  margin: 0;
+  font-weight: 600;
+  color: var(--morado-oscuro);
+}
+
+.acciones {
   display: flex;
   justify-content: flex-end;
+  margin-top: 0.3rem;
+}
+
+.btn-eliminar {
+  background: var(--error);
+  color: #fff;
+  padding: 0.45rem 0.75rem;
+  border: 0;
+  border-radius: var(--radio);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.btn-eliminar:hover {
+  filter: brightness(0.85);
 }
