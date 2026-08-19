@@ -1,47 +1,9 @@
-/* Fuente base y fondo general */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* Ajustes base del body */
+@layer base {
 body {
-  font-family: sans-serif;
-  background-color: #f2f2f2; /* gris claro */
-  color: #222; /* texto oscuro legible */
-  margin: 0;
-  padding: 0;
+@apply bg-gray-50 text-gray-800 font-sans;
 }
-
-/* Enlaces */
-a {
-  color: #008037; /* verde SENA */
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* Botones genéricos */
-button {
-  background-color: #008037;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 14px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-button:hover {
-  background-color: #006b2f; /* verde más oscuro */
-}
-
-/* Imágenes responsivas */
-img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Centramos el contenido principal */
-#root {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
 }
