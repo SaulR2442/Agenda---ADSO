@@ -1,18 +1,25 @@
 {
   "contactos": [
     {
-      "nombre": "Duque",
-      "telefono": "30233327228",
-      "correo": "duque9@gmail.com",
-      "etiqueta": "nada",
-      "id": "5ZxLUH-1z3I"
-    },
-    {
       "nombre": "Sergio",
       "telefono": "300300303030",
       "correo": "sergio73@gmial.com",
       "etiqueta": "programar",
       "id": "It7XRpJKvT4"
+    },
+    {
+      "nombre": "Messi",
+      "telefono": "101010101001",
+      "correo": "messi@gmail",
+      "etiqueta": "",
+      "id": "BfT3GeK5CSQ"
+    },
+    {
+      "nombre": "Pique",
+      "telefono": "333333333333",
+      "correo": "piqueinfiel@gmail.com",
+      "etiqueta": "futbol",
+      "id": "7w94QUdWfx8"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
