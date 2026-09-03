@@ -39,6 +39,5 @@ export async function eliminarContactoPorId(id) {
   // Validamos la respuesta
   if (!res.ok) throw new Error("Error al eliminar el contacto");
 
-  // Devolvemos true indicando éxito
   return true;
 }
