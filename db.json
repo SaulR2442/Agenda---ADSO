@@ -20,6 +20,27 @@
       "correo": "piqueinfiel@gmail.com",
       "etiqueta": "futbol",
       "id": "7w94QUdWfx8"
+    },
+    {
+      "nombre": "Daniel Duque",
+      "telefono": "8888888888888888888",
+      "correo": "soyelmasGey@gmail.com",
+      "etiqueta": "Jugador profesional de FIFA",
+      "id": "ybhJAC_uw8g"
+    },
+    {
+      "nombre": "Samuel Estrada",
+      "telefono": "21558694334",
+      "correo": "Beli10Super@gmail.com",
+      "etiqueta": "Jugador Profesional de Futbol, llamada BeliGol",
+      "id": "R0NCLXa5J3k"
+    },
+    {
+      "nombre": "Yoiner ",
+      "telefono": "33378896678",
+      "correo": "furrorLocos@gmail.com",
+      "etiqueta": "",
+      "id": "SvqtAEF1H_0"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
