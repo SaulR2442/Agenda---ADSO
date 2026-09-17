@@ -1,19 +1,26 @@
-// Importamos React y el hook useState para manejar estados locales del componente
+// Componente de formulario reutilizable para crear y editar contactos.
+// - En modo "crear": usa onAgregar(form).
+// - En modo "editar": usa onActualizar({ ...form, id }) y muestra botón "Cancelar edición".
+
 import { useState } from "react";
 
-// Componente FormularioContacto
-// Recibe como props la función onAgregar (para crear un contacto)
-// y la variable cargandoDesdeApp (si quieres reutilizar estados desde App, opcional)
-function FormularioContacto({ onAgregar }) {
+function FormularioContacto({
+  onAgregar,
+  onActualizar,
+  contactoEnEdicion,
+  onCancelarEdicion,
+}) {
   // Estado principal del formulario: almacena los valores de cada campo
+  // Si hay un contacto en edición, se inicializa con sus datos (misma
+  // lógica que el anterior useEffect, pero sin efectos secundarios).
   const [form, setForm] = useState({
-    nombre: "",
-    telefono: "",
-    correo: "",
-    etiqueta: "",
+    nombre: contactoEnEdicion?.nombre || "",
+    telefono: contactoEnEdicion?.telefono || "",
+    correo: contactoEnEdicion?.correo || "",
+    etiqueta: contactoEnEdicion?.etiqueta || "",
   });
 
-  // Estado para almacenar los mensajes de error de validación por cada campo
+  // Estado para almacenar los mensajes de error de validación por cada campo obligatorio
   const [errores, setErrores] = useState({
     nombre: "",
     telefono: "",
@@ -21,17 +28,12 @@ function FormularioContacto({ onAgregar }) {
   });
 
   // Estado que indica si el formulario está enviando la información al servidor
-  // Sirve para desactivar el botón y mostrar un texto diferente
   const [enviando, setEnviando] = useState(false);
 
   // Función manejadora del cambio de los inputs
-  // Se ejecuta cada vez que el usuario escribe en un campo
   const onChange = (e) => {
-    // Extraemos el nombre y el valor del input que disparó el evento
     const { name, value } = e.target;
 
-    // Actualizamos el estado del formulario, manteniendo lo anterior
-    // y solo cambiando la propiedad correspondiente (nombre, telefono, correo o etiqueta)
     setForm((prevForm) => ({
       ...prevForm,
       [name]: value,
@@ -39,37 +41,25 @@ function FormularioContacto({ onAgregar }) {
   };
 
   // Función encargada de validar todos los campos del formulario
-  // Devuelve true si el formulario es válido, y false en caso contrario
   function validarFormulario() {
-    // Creamos un objeto temporal para ir llenando los mensajes de error
     const nuevosErrores = { nombre: "", telefono: "", correo: "" };
 
-    // Validación del campo "nombre"
-    // .trim() elimina espacios en blanco al inicio y al final del texto
-    // Esto evita que el usuario envíe solo espacios como si fuera un dato válido
     if (!form.nombre.trim()) {
       nuevosErrores.nombre = "El nombre es obligatorio.";
     }
 
-    // Validación del campo "telefono"
     if (!form.telefono.trim()) {
       nuevosErrores.telefono = "El teléfono es obligatorio.";
     }
 
-    // Validación del campo "correo"
     if (!form.correo.trim()) {
-      // Si el usuario no escribió nada
       nuevosErrores.correo = "El correo es obligatorio.";
     } else if (!form.correo.includes("@")) {
-      // Si escribió texto pero no contiene el símbolo @
       nuevosErrores.correo = "El correo debe contener @.";
     }
 
-    // Actualizamos el estado de errores para que React vuelva a renderizar
-    // y se muestren los mensajes en pantalla
     setErrores(nuevosErrores);
 
-    // Retornamos true SOLO si no hay mensajes de error en ninguno de los campos
     return (
       !nuevosErrores.nombre &&
       !nuevosErrores.telefono &&
@@ -78,45 +68,66 @@ function FormularioContacto({ onAgregar }) {
   }
 
   // Función manejadora del envío del formulario
-  // Es async porque puede llamar a una función onAgregar que se comunique con la API
   const onSubmit = async (e) => {
-    // Evitamos que el formulario recargue la página por defecto
     e.preventDefault();
 
-    // Ejecutamos la validación. Si no es válida, salimos y no guardamos el contacto
     const esValido = validarFormulario();
     if (!esValido) return;
 
     try {
-      // Marcamos que el formulario está en proceso de envío
       setEnviando(true);
 
-      // Llamamos a la función que llega por props y que se encarga de guardar el contacto
-      // Puede ser una llamada a la API a través de api.js
-      await onAgregar(form);
+      if (contactoEnEdicion) {
+        // MODO EDICIÓN: llamamos a onActualizar con el id del contacto
+        await onActualizar({
+          ...form,
+          id: contactoEnEdicion.id,
+        });
 
-      // Si todo fue exitoso, limpiamos los campos del formulario
-      setForm({
-        nombre: "",
-        telefono: "",
-        correo: "",
-        etiqueta: "",
-      });
+        // Limpiamos el formulario y salimos de modo edición
+        setForm({
+          nombre: "",
+          telefono: "",
+          correo: "",
+          etiqueta: "",
+        });
+        setErrores({
+          nombre: "",
+          telefono: "",
+          correo: "",
+        });
+        if (onCancelarEdicion) onCancelarEdicion();
+      } else {
+        // MODO CREAR: llamamos a onAgregar como en clases anteriores
+        await onAgregar(form);
 
-      // También limpiamos los mensajes de error
-      setErrores({
-        nombre: "",
-        telefono: "",
-        correo: "",
-      });
+        // Limpiamos el formulario para un nuevo registro
+        setForm({
+          nombre: "",
+          telefono: "",
+          correo: "",
+          etiqueta: "",
+        });
+        setErrores({
+          nombre: "",
+          telefono: "",
+          correo: "",
+        });
+      }
     } finally {
-      // Independientemente de si la operación salió bien o mal,
-      // apagamos el estado de "enviando" para reactivar el botón
       setEnviando(false);
     }
   };
 
-  // JSX que pinta el formulario en pantalla
+  // Texto dinámico del título y del botón según el modo
+  const estaEnEdicion = Boolean(contactoEnEdicion);
+  const tituloFormulario = estaEnEdicion
+    ? "Editar contacto"
+    : "Nuevo contacto";
+  const textoBotonPrincipal = estaEnEdicion
+    ? "Guardar cambios"
+    : "Agregar contacto";
+
   return (
     <form
       className="bg-white shadow-sm rounded-2xl p-6 space-y-4 mb-8"
@@ -124,7 +135,7 @@ function FormularioContacto({ onAgregar }) {
     >
       {/* Título del formulario */}
       <h2 className="text-lg font-semibold text-gray-900 mb-2">
-        Nuevo contacto
+        {tituloFormulario}
       </h2>
 
       {/* Campo Nombre */}
@@ -136,10 +147,9 @@ function FormularioContacto({ onAgregar }) {
           className="w-full rounded-xl border-gray-300 focus:ring-purple-500 focus:border-purple-500"
           name="nombre"
           placeholder="Ej: Camila Pérez"
-          value={form.nombre}    // El valor mostrado viene del estado form.nombre
-          onChange={onChange}    // Al escribir, actualizamos el estado
+          value={form.nombre}
+          onChange={onChange}
         />
-        {/* Si existe un mensaje en errores.nombre, lo mostramos debajo del input */}
         {errores.nombre && (
           <p className="mt-1 text-xs text-red-600">{errores.nombre}</p>
         )}
@@ -154,10 +164,9 @@ function FormularioContacto({ onAgregar }) {
           className="w-full rounded-xl border-gray-300 focus:ring-purple-500 focus:border-purple-500"
           name="telefono"
           placeholder="Ej: 300 123 4567"
-          value={form.telefono}  // Valor controlado desde form.telefono
+          value={form.telefono}
           onChange={onChange}
         />
-        {/* Mensaje de error específico para el campo teléfono */}
         {errores.telefono && (
           <p className="mt-1 text-xs text-red-600">{errores.telefono}</p>
         )}
@@ -172,10 +181,9 @@ function FormularioContacto({ onAgregar }) {
           className="w-full rounded-xl border-gray-300 focus:ring-purple-500 focus:border-purple-500"
           name="correo"
           placeholder="Ej: camila@sena.edu.co"
-          value={form.correo}    // Valor controlado desde form.correo
+          value={form.correo}
           onChange={onChange}
         />
-        {/* Mensaje de error específico para el campo correo */}
         {errores.correo && (
           <p className="mt-1 text-xs text-red-600">{errores.correo}</p>
         )}
@@ -195,23 +203,32 @@ function FormularioContacto({ onAgregar }) {
         />
       </div>
 
-      {/* Botón para enviar el formulario */}
-      <div className="pt-2">
+      {/* Botones del formulario */}
+      <div className="pt-2 flex flex-col md:flex-row md:items-center gap-3">
+        {/* Botón principal: crear o guardar cambios */}
         <button
           type="submit"
-          // El botón se desactiva mientras enviando sea true
           disabled={enviando}
           className="w-full md:w-auto bg-purple-600 hover:bg-purple-700
                      disabled:bg-purple-300 disabled:cursor-not-allowed
                      text-white px-6 py-3 rounded-xl font-semibold shadow-sm"
         >
-          {/* Texto dinámico: cambia según el estado enviando */}
-          {enviando ? "Guardando..." : "Agregar contacto"}
+          {enviando ? "Guardando..." : textoBotonPrincipal}
         </button>
+
+        {/* Botón secundario: cancelar edición (solo en modo edición) */}
+        {estaEnEdicion && (
+          <button
+            type="button"
+            onClick={onCancelarEdicion}
+            className="w-full md:w-auto bg-gray-100 text-gray-700 px-6 py-3 rounded-xl border border-gray-300 hover:bg-gray-200 text-sm"
+          >
+            Cancelar edición
+          </button>
+        )}
       </div>
     </form>
   );
 }
 
-// Exportamos el componente para usarlo en App.jsx
 export default FormularioContacto;
